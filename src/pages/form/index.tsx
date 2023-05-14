@@ -1,13 +1,8 @@
-import React, { useRef } from "react";
-import { Input } from "@tarojs/components";
-// import { WKForm, FormItem } from '@/component/wk-form';
-import {
-  WKButton,
-  WKPickerSelector,
-  WKForm,
-  WKFormItem,
-} from "@wakeapp/components";
-import { FormModel } from "@/component/wk-form/model/FormModel";
+import { useRef } from "react";
+import { Input, Button } from "@tarojs/components";
+import { WKForm, FormItem } from "@/components/wk-form";
+import { WKPickerSelector } from "@wakeapp/components";
+import { FormModel } from "@/components/wk-form/model/FormModel";
 
 export default function FormText() {
   const formRef = useRef<FormModel>();
@@ -20,20 +15,16 @@ export default function FormText() {
   return (
     <>
       <WKForm onSubmit={submit} ref={formRef}>
-        <WKFormItem label='姓名' path='name' onChangePropsName='onInput' required>
+        <FormItem label='姓名' prop='name' onChangePropsName='onInput' required>
           <Input onInput={handleInput} placeholder='请输入'></Input>
-        </WKFormItem>
-        <WKFormItem label='城市' path='cityCode' required>
+        </FormItem>
+        <FormItem label='城市' prop='cityCode' required>
           <WKPickerSelector
             options={[{ label: "中国", value: 1 }]}
           ></WKPickerSelector>
-        </WKFormItem>
+        </FormItem>
       </WKForm>
-      <WKButton
-        onClick={() => formRef.current?.validate()}
-        text='提交'
-        type='primary'
-      />
+      <Button onClick={() => formRef.current?.validate()}>提交</Button>
     </>
   );
 }

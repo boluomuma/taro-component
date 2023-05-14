@@ -1,6 +1,7 @@
-import ValidatorSchema, { RuleItem } from 'async-validator';
-import { FormModel } from './FormModel';
-import { FormValidationTrigger } from '../types';
+import ValidatorSchema, { RuleItem } from "async-validator";
+import { makeAutoObservable } from "mobx";
+import { FormModel } from "./FormModel";
+import { FormValidationTrigger } from "../types";
 
 export interface FormItemProps {
   label?: string;
@@ -9,33 +10,52 @@ export interface FormItemProps {
   required?: boolean;
   validateTriggerType?: FormValidationTrigger;
   onChangePropsName?: string;
-  children?: React.ReactNode
 }
 
 export class FormItemModel {
   form: FormModel;
-  validatorState: 'success' | 'error' | string | null = '';
-  validatorMessage?: string = '';
+  validatorState: "success" | "error" | string | null = "";
+  validatorMessage?: string = "";
   props: FormItemProps;
   mounted: boolean = false;
 
   constructor(from: FormModel, props: FormItemProps) {
     this.form = from;
     this.props = { ...props };
+    makeAutoObservable(this)
   }
   private resetState() {
-    this.validatorMessage = '';
+    this.validatorMessage = "";
     this.validatorState = null;
   }
   get prop() {
     return this.props.prop;
   }
+  get label() {
+    return this.props.label;
+  }
   get validateTriggerType() {
-    return this.props.validateTriggerType || this.form.validateTriggerType || 'onChange';
+    return (
+      this.props.validateTriggerType ||
+      this.form.validateTriggerType ||
+      "onChange"
+    );
+  }
+  get required() {
+    if (this.props.required) return true;
+    if (this.props.rules) this.props.rules.some((item) => item.required);
   }
   get value() {
     return this.form.getFieldValue(this.prop);
   }
+  onFocus = () => {
+    this.validateIfNeeded("onFocus");
+  };
+
+  onBlur = () => {
+    this.validateIfNeeded("onBlur");
+  };
+
   /**
    * 触发校验
    * @param triggerType
@@ -55,10 +75,8 @@ export class FormItemModel {
     this.form.setFieldValue(this.prop, value);
   }
   onChange = (value: any) => {
-    console.log('change', value);
-
     this.setValue(value);
-    this.validateIfNeeded('onChange');
+    this.validateIfNeeded("onChange");
   };
   onMount = () => {
     this.mounted = true;
@@ -74,7 +92,9 @@ export class FormItemModel {
     const { rules } = this.props;
     if (this.props.required) {
       return {
-        [this.prop]: rules ? rules.concat({ required: true }) : { required: true },
+        [this.prop]: rules
+          ? rules.concat({ required: true })
+          : { required: true },
       };
     }
     if (this.props.rules) {
@@ -90,14 +110,14 @@ export class FormItemModel {
       if (descriptor) {
         const validatorSchema = new ValidatorSchema(descriptor);
         const model = { [this.prop]: this.value };
-        console.log('validate', model, this.form.value);
-
-        validatorSchema.validate(model, errors => {
+        validatorSchema.validate(model, (errors) => {
           if (errors) {
             this.validatorMessage = errors[0].message;
-            this.validatorState = 'error';
+            this.validatorState = "error";
             reject(this.validatorMessage);
           } else {
+            this.validatorMessage = '';
+            this.validatorState = "success";
             resolve(true);
           }
         });

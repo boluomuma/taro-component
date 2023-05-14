@@ -5,6 +5,7 @@ import { FormItemModel } from './FormItemModel';
 
 import { FormValidationTrigger } from '../types';
 
+
 export interface FormProps {
   value?: Record<string, any>;
   rules?: RuleItem[];
