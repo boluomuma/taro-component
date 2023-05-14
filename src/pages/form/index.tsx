@@ -1,22 +1,36 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { Input, Button } from "@tarojs/components";
 import { WKForm, FormItem } from "@/components/wk-form";
 import { WKPickerSelector } from "@wakeapp/components";
 import { FormModel } from "@/components/wk-form/model/FormModel";
 
 export default function FormText() {
-  const formRef = useRef<FormModel>();
+  const formRef = useRef<FormModel>(null);
+  const [form, setForm] = useState({});
   const submit = (val: any) => {
     console.log("fdsf", val);
   };
-  const handleInput = (e) => {
-    console.log("e", e);
+
+  const handleChange = (prop, val) => {
+    console.log(prop, val, form);
+    setForm((pre) => ({
+      ...pre,
+      [prop]: val,
+    }));
   };
+
+  console.log("form", form);
+
   return (
     <>
-      <WKForm onSubmit={submit} ref={formRef}>
+      <WKForm
+        ref={formRef}
+        value={form}
+        onSubmit={submit}
+        onChange={handleChange}
+      >
         <FormItem label='姓名' prop='name' onChangePropsName='onInput' required>
-          <Input onInput={handleInput} placeholder='请输入'></Input>
+          <Input placeholder='请输入'></Input>
         </FormItem>
         <FormItem label='城市' prop='cityCode' required>
           <WKPickerSelector

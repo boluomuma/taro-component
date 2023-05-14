@@ -1,9 +1,9 @@
 import {
-  FC,
   ForwardedRef,
   useMemo,
   useImperativeHandle,
   forwardRef,
+  useEffect,
 } from "react";
 import { Form } from "@tarojs/components";
 import { FormContextProvider } from "../context";
@@ -11,6 +11,7 @@ import { FormModel, FormProps } from "../model/FormModel";
 
 export const WKForm = forwardRef<FormModel, FormProps>(
   (props, ref: ForwardedRef<FormModel>) => {
+    const { value } = props;
     const model = useMemo(() => {
       return new FormModel(props);
     }, []);
@@ -22,9 +23,13 @@ export const WKForm = forwardRef<FormModel, FormProps>(
       [model]
     );
 
-    const handleSubmit = () => {};
+    useEffect(() => {
+      model.updateProps(props);
+    }, [value]);
 
-    console.log("form", props.children);
+    const handleSubmit = () => {
+      model.validate();
+    };
 
     return (
       <FormContextProvider model={model}>

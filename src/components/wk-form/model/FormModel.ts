@@ -1,16 +1,17 @@
-import { makeAutoObservable } from 'mobx';
-import { unset } from 'lodash';
-import { RuleItem } from 'async-validator';
-import { FormItemModel } from './FormItemModel';
+import { makeAutoObservable } from "mobx";
+import { unset } from "lodash";
+import { RuleItem } from "async-validator";
+import { FormItemModel } from "./FormItemModel";
 
-import { FormValidationTrigger } from '../types';
-
+import { FormValidationTrigger } from "../types";
+import { getValidValue } from "../utils";
 
 export interface FormProps {
   value?: Record<string, any>;
   rules?: RuleItem[];
   children?: React.ReactNode;
   onSubmit?: (val: any) => void;
+  onChange?: (prop: string, val: any) => void;
   validateTriggerType?: FormValidationTrigger;
 }
 
@@ -30,20 +31,22 @@ export class FormModel {
     this.props = { ...props };
   }
   get fieldList() {
-    return Object.keys(this.fields).map(k => this.fields[k]);
+    return Object.keys(this.fields).map((k) => this.fields[k]);
   }
   /**
    * 验证触发方式
    */
   get validateTriggerType(): FormValidationTrigger {
-    return this.props.validateTriggerType ?? 'onChange';
+    return this.props.validateTriggerType ?? "onChange";
   }
   getFieldValue(prop: string) {
     return this.value[prop];
   }
   addField(field: FormItemModel) {
     if (this.fields[field.prop]) {
-      throw new Error(`Field ${field.prop} already exists, please unmount first`);
+      throw new Error(
+        `Field ${field.prop} already exists, please unmount first`
+      );
     }
     this.fields[field.prop] = field;
   }
@@ -52,17 +55,25 @@ export class FormModel {
     // 设置为 undefined
     unset(this.value, field.prop);
   }
+  /**
+   * 设置值，一般是form-item调用
+   * @param path
+   * @param val
+   */
   setFieldValue(path: string, val: any) {
     this.value[path] = val;
+    this.props.onChange?.(path, val);
+  }
+  updateProps(props: FormProps) {
+    let dirty = false;
+    if (props.value !== this.props.value) {
+      dirty = true;
+      this.value = getValidValue(props.value);
+    }
   }
 
-  // submit = async () => {
-  //   await this.validate();
-  //   return this.value;
-  // };
-
   async validate() {
-    const promises = this.fieldList.map(field => field.validate());
+    const promises = this.fieldList.map((field) => field.validate());
     try {
       await Promise.all(promises);
       this.props.onSubmit?.(this.value);
