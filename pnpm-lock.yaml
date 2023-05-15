@@ -30,6 +30,7 @@ specifiers:
   '@wakeapp/components': ^1.0.10
   async-validator: ^4.2.5
   babel-preset-taro: 3.6.6
+  classnames: ^2.3.2
   eslint: ^8.12.0
   eslint-config-taro: 3.6.6
   eslint-plugin-import: ^2.12.0
@@ -66,6 +67,7 @@ dependencies:
   '@tarojs/taro': registry.npmmirror.com/@tarojs/taro/3.6.6_@types+react@18.2.6
   '@wakeapp/components': registry.npmmirror.com/@wakeapp/components/1.0.10_xl5pe6gx43ddwnggqs46vxa7qe
   async-validator: registry.npmmirror.com/async-validator/4.2.5
+  classnames: registry.npmmirror.com/classnames/2.3.2
   lodash: registry.npmmirror.com/lodash/4.17.21
   mobx: registry.npmmirror.com/mobx/6.9.0
   mobx-react: registry.npmmirror.com/mobx-react/7.6.0_lrdhi4fih7ii4kmeak7ov4c3ha

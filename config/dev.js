@@ -6,5 +6,4 @@ module.exports = {
   },
   mini: {},
   h5: {},
-  plugins: ['@tarojs/plugin-react-devtools']
 }

@@ -7,6 +7,10 @@ export default function Index() {
       label: "form表单",
       url: "/pages/form/index",
     },
+    {
+      label: "表格",
+      url: "/pages/table/index",
+    },
   ];
   return (
     <View className='container'>
