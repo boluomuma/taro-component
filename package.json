@@ -45,6 +45,7 @@
     "@tarojs/plugin-platform-swan": "3.6.6",
     "@tarojs/plugin-platform-tt": "3.6.6",
     "@tarojs/plugin-platform-weapp": "3.6.6",
+    "@tarojs/plugin-react-devtools": "^3.6.6",
     "@tarojs/react": "3.6.6",
     "@tarojs/runtime": "3.6.6",
     "@tarojs/shared": "3.6.6",
