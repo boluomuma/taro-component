@@ -1,0 +1,21 @@
+@import '../style/var.scss';
+
+.van-picker-column {
+  overflow: hidden;
+  text-align: center;
+  @include theme(color, $picker-option-text-color);
+  @include theme(font-size, $picker-option-font-size);
+
+  &__item {
+    padding: 0 10px;
+
+    &--selected {
+      @include theme(font-weight, $font-weight-bold);
+      @include theme(color, $picker-option-selected-text-color);
+    }
+
+    &--disabled {
+      @include theme(opacity, $picker-option-disabled-opacity);
+    }
+  }
+}

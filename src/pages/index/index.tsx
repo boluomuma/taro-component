@@ -11,6 +11,10 @@ export default function Index() {
       label: "表格",
       url: "/pages/table/index",
     },
+    {
+      label: "弹窗",
+      url: "/pages/popup/index",
+    },
   ];
   return (
     <View className='container'>
