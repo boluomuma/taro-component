@@ -1,5 +1,6 @@
 import { View } from "@tarojs/components";
 import Taro from "@tarojs/taro";
+import './index.scss'
 
 export default function Index() {
   const list = [
@@ -20,6 +21,7 @@ export default function Index() {
     <View className='container'>
       {list.map((item) => (
         <View
+          className='item'
           key={item.url}
           onClick={() =>
             Taro.navigateTo({
